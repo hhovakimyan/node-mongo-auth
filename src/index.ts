@@ -1,12 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 
-import {validate} from "#middleware/validation";
-import {registerUserSchema} from "#validation/UserSchema";
-
-import UserController from "#controllers/UserController";
-import AuthenticationController from "#controllers/AuthenticationController";
-
 import authRouter from '#routes/auth';
 import userRouter from '#routes/user';
 

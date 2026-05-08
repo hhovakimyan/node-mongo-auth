@@ -1,5 +1,6 @@
 import type {Request, Response} from "express";
 import UserRepository from "#repositories/UserRepository";
+import type {RegisterUserParams} from "#types/Controllers";
 
 class AuthenticationController {
     public static async registerUser(req: Request<any, any, RegisterUserParams>, res: Response) {

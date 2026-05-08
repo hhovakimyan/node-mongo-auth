@@ -7,3 +7,5 @@ export type UserProps = {
 };
 
 export type ListUserProps = Omit<UserProps, 'password'>;
+
+export type CreateUserProps = Omit<UserProps, '_id'>;
