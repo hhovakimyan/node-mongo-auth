@@ -1,5 +1,5 @@
 import type {Request, Response} from 'express';
-import type { RegisterUserParams } from '#types/Controllers';
+import type {UpdateUserParams} from '#types/Controllers';
 import UserRepository from "#repositories/UserRepository";
 
 class UserController {
@@ -24,6 +24,17 @@ class UserController {
 
             return;
         }
+
+        res.status(200).json({data: response});
+    }
+
+    public static async updateUserData(req: Request<{id: string}, any, UpdateUserParams>, res: Response)
+    {
+        const mongooseRepo = new UserRepository();
+        const instance = await mongooseRepo.getInstance();
+
+        const userId = req.params.id;
+        const response = await instance.updateUser(userId, req.body);
 
         res.status(200).json({data: response});
     }

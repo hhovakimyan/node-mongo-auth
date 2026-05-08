@@ -1,8 +1,9 @@
 import type {Mongoose, Model} from "mongoose";
 
 import MongooseClient from "#integrations/MongoDb/MongooseClient";
-import type {ListUserProps, UserProps} from "#types/DataModels";
+import type {CreateUserProps, ListUserProps} from "#types/DataModels";
 import {UserSchema} from "#dbSchemas/User";
+import type {UpdateUserParams} from "#types/Controllers";
 
 // TODO think about making repos single-tone
 class UserRepository {
@@ -16,7 +17,7 @@ class UserRepository {
         return this;
     }
 
-    public async createUser(user: UserProps): Promise<string> {
+    public async createUser(user: CreateUserProps): Promise<string> {
         if (!this.mongoose || !this.model) {
             throw new Error("Mongoose not initialized");
         }
@@ -57,6 +58,17 @@ class UserRepository {
         const data: Promise<ListUserProps | null> = await this.model.findOne({email}, ['_id', 'firstName', 'lastName']).exec();
 
         return data;
+    }
+
+    public async updateUser(id: string, updateData: UpdateUserParams)
+    {
+        if (!this.mongoose || !this.model) {
+            throw new Error("Mongoose not initialized");
+        }
+
+        const updatedData: Promise<ListUserProps> = await this.model.findByIdAndUpdate(id, updateData, { returnDocument: 'after' });
+
+        return updatedData;
     }
 }
 
