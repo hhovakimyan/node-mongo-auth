@@ -3,7 +3,7 @@ import UserRepository from "#repositories/UserRepository";
 import type {RegisterUserParams} from "#types/Controllers";
 
 class AuthenticationController {
-    public static async registerUser(req: Request<any, any, RegisterUserParams>, res: Response) {
+    public static async registerUser(req: Request<{}, {}, RegisterUserParams>, res: Response) {
         const { email, password, firstName, lastName } = req.body;
 
         const mongooseRepo = new UserRepository();

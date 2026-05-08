@@ -28,7 +28,7 @@ class UserController {
         res.status(200).json({data: response});
     }
 
-    public static async updateUserData(req: Request<{id: string}, any, UpdateUserParams>, res: Response)
+    public static async updateUserData(req: Request<{id: string}, {}, UpdateUserParams>, res: Response)
     {
         const mongooseRepo = new UserRepository();
         const instance = await mongooseRepo.getInstance();

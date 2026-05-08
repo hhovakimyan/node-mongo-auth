@@ -7,7 +7,8 @@
   "scripts": {
     "start": "npx tsx --watch src/index.ts",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src"
   },
   "imports": {
     "#controllers/*": {
@@ -47,6 +48,8 @@
     "@types/express": "^5.0.6",
     "@types/mongodb": "^4.0.6",
     "@types/node": "^25.6.0",
-    "typescript": "^6.0.3"
+    "eslint": "^10.3.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.2"
   }
 }
