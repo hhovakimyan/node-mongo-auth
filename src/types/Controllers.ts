@@ -1,7 +1,5 @@
-export interface RegisterUserParams {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
+import type {UserProps} from "#types/DataModels";
+
+export type RegisterUserParams = Omit<UserProps, '_id'> & {
     passwordConfirm: string;
 }

@@ -5,6 +5,10 @@ import {validate} from "#middleware/validation";
 import {registerUserSchema} from "#validation/UserSchema";
 
 import UserController from "#controllers/UserController";
+import AuthenticationController from "#controllers/AuthenticationController";
+
+import authRouter from '#routes/auth';
+import userRouter from '#routes/user';
 
 // Load environment variables
 dotenv.config();
@@ -14,11 +18,8 @@ const port = "3000";
 
 app.use(express.json());
 
-app.get('/', (_req, res) => {
-    res.send(JSON.stringify({message: "Hello World"}));
-});
-
-app.post('/register', validate(registerUserSchema), UserController.registerUser);
+app.use('/auth', authRouter);
+app.use('/users', userRouter);
 
 app.listen(port, () => {
     console.log(`Listening to port ${port}`);

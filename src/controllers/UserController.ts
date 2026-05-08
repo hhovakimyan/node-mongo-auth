@@ -1,26 +1,31 @@
 import type {Request, Response} from 'express';
 import type { RegisterUserParams } from '#types/Controllers';
 import UserRepository from "#repositories/UserRepository";
-import UserMongooseRepository from "#repositories/UserMongooseRepository";
 
 class UserController {
-    public static async registerUser(req: Request<any, any, RegisterUserParams>, res: Response) {
-        const { email, password, firstName, lastName } = req.body;
+    public static async listAllUsers(req: Request, res: Response)
+    {
+        const mongooseRepo = new UserRepository();
+        const instance = await mongooseRepo.getInstance();
+        const response = await instance.listAllUsers();
 
-        const repo = new UserRepository();
-        const collection = await repo.getInstance();
-        const userWithSameEmail = await collection.findUser(email);
-        if (userWithSameEmail) {
-            res.status(400).json({errors: ["User with same email is already registered"]});
+        res.status(200).json({data: response});
+    }
+
+    public static async getUserData(req: Request<{id: string}>, res: Response)
+    {
+        const mongooseRepo = new UserRepository();
+        const instance = await mongooseRepo.getInstance();
+
+        const userId = req.params.id;
+        const response = await instance.findUserById(userId);
+        if (!response) {
+            res.status(404).json({message: "User not found"});
 
             return;
         }
 
-        const mongooseRepo = new UserMongooseRepository();
-        const instance = await mongooseRepo.getInstance();
-        const response = await instance.createUser({email, password, firstName, lastName});
-
-        res.status(201).json({userId: response});
+        res.status(200).json({data: response});
     }
 }
 

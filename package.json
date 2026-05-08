@@ -30,6 +30,9 @@
     },
     "#dbSchemas/*": {
       "default": "./src/dbSchemas/*.ts"
+    },
+    "#routes/*": {
+      "default": "./src/routes/*.ts"
     }
   },
   "private": true,
