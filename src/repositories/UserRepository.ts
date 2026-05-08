@@ -1,5 +1,5 @@
 import type { UserProps } from "#types/DataModels";
-import MongoClient from "#database/MongoClient";
+import MongoClient from "#integrations/MongoDb/MongoClient";
 import type {Collection} from "mongodb";
 
 class UserRepository {
