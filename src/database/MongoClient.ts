@@ -2,18 +2,14 @@ import { MongoClient as Mongo, Db as MongoDb, Collection } from "mongodb";
 import type { Document } from "mongodb";
 
 class MongoClient {
-    private static readonly connectionUrl = "mongodb://localhost:27017";
-    private static readonly dbName = "auth";
     private static client: Mongo | null;
     private static db: MongoDb | null;
 
-    private constructor() {}
-
     public static async getInstance(): Promise<Mongo> {
         if (!MongoClient.client) {
-            MongoClient.client = new Mongo(MongoClient.connectionUrl);
+            MongoClient.client = new Mongo(process.env.MONGO_CONNECTION_STRING);
             await MongoClient.client.connect();
-            MongoClient.db = MongoClient.client.db(this.dbName);
+            MongoClient.db = MongoClient.client.db(process.env.MONGO_DB_NAME);
         }
 
         return MongoClient.client;

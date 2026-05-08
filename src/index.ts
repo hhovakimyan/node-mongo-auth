@@ -1,9 +1,13 @@
 import express from 'express';
+import dotenv from 'dotenv';
 
 import {validate} from "#middleware/validation";
 import {registerUserSchema} from "#validation/UserSchema";
 
 import UserController from "#controllers/UserController";
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 const port = "3000";
