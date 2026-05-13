@@ -1,5 +1,5 @@
-import { MongoClient as Mongo, Db as MongoDb, Collection } from "mongodb";
-import type { Document } from "mongodb";
+import { MongoClient as Mongo, Db as MongoDb, Collection } from 'mongodb';
+import type { Document } from 'mongodb';
 
 class MongoClient {
     private static client: Mongo | null;
@@ -17,7 +17,7 @@ class MongoClient {
 
     public static getCollection<T extends Document>(collectionName: string): Collection<T> {
         if (!MongoClient.db) {
-            throw new Error("MongoClient not initialized");
+            throw new Error('MongoClient not initialized');
         }
 
         return MongoClient.db.collection(collectionName);

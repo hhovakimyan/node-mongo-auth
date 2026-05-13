@@ -1,6 +1,6 @@
-import type {Request, Response} from "express";
-import UserRepository from "#repositories/UserRepository";
-import type {RegisterUserParams} from "#types/Controllers";
+import type { Request, Response } from 'express';
+import UserRepository from '#repositories/UserRepository';
+import type { RegisterUserParams } from '#types/Controllers';
 
 class AuthenticationController {
     public static async registerUser(req: Request<{}, {}, RegisterUserParams>, res: Response) {
@@ -10,14 +10,14 @@ class AuthenticationController {
         const instance = await mongooseRepo.getInstance();
         const userWithSameEmail = await instance.findUserByEmail(email);
         if (userWithSameEmail) {
-            res.status(400).json({errors: ["User with same email is already registered"]});
+            res.status(400).json({ errors: ['User with same email is already registered'] });
 
             return;
         }
 
-        const response = await instance.createUser({email, password, firstName, lastName});
+        const response = await instance.createUser({ email, password, firstName, lastName });
 
-        res.status(201).json({userId: response});
+        res.status(201).json({ userId: response });
     }
 }
 

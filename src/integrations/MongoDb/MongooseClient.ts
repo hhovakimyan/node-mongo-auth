@@ -8,9 +8,11 @@ class MongooseClient {
             return MongooseClient.mongoose;
         }
 
-        MongooseClient.mongoose = await mongoose.connect(`${process.env.MONGO_CONNECTION_STRING}/${process.env.MONGO_DB_NAME}`);
+        MongooseClient.mongoose = await mongoose.connect(
+            `${process.env.MONGO_CONNECTION_STRING}/${process.env.MONGO_DB_NAME}`,
+        );
         if (!MongooseClient.mongoose) {
-            throw new Error("Connection failed");
+            throw new Error('Connection failed');
         }
 
         return MongooseClient.mongoose;

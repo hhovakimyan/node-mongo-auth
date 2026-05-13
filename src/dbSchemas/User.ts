@@ -12,4 +12,4 @@ export const UserSchema = {
         lowercase: true,
     },
     password: String,
-}
+};
