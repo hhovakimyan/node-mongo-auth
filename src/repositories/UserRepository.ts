@@ -6,6 +6,7 @@ import {UserSchema} from "#dbSchemas/User";
 import type {UpdateUserParams} from "#types/Controllers";
 
 // TODO think about making repos single-tone
+// TODO think about dependency injection in Node.js
 class UserRepository {
     private static model: Model | undefined;
 

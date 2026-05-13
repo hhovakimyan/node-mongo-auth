@@ -34,9 +34,17 @@ class UserController {
         const instance = await mongooseRepo.getInstance();
 
         const userId = req.params.id;
-        const response = await instance.updateUser(userId, req.body);
+        try {
+            const response = await instance.updateUser(userId, req.body);
+            if (!response) {
+                res.status(404).json({message: "User not found"});
+                return;
+            }
 
-        res.status(200).json({data: response});
+            res.status(200).json({data: response});
+        } catch (error) {
+            res.status(500).json({message: "Updating user failed"});
+        }
     }
 }
 
