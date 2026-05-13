@@ -10,6 +10,8 @@ import type { UpdateUserParams } from '#types/Controllers';
 class UserRepository {
     private static model: Model | undefined;
 
+    private publicFields: string[] = ['_id', 'firstName', 'lastName', 'email'];
+
     public async getInstance(): Promise<UserRepository> {
         if (!UserRepository.model) {
             const mongoose = await MongooseClient.getInstance();
@@ -36,7 +38,7 @@ class UserRepository {
         }
 
         const data: Promise<ListUserProps[]> = await UserRepository.model
-            .find({}, ['_id', 'firstName', 'lastName', 'email'])
+            .find({}, this.publicFields)
             .exec();
 
         return data;
@@ -48,7 +50,7 @@ class UserRepository {
         }
 
         const data: Promise<ListUserProps | null> = await UserRepository.model
-            .findById(id, ['firstName', 'lastName', 'email'])
+            .findById(id, this.publicFields)
             .exec();
 
         return data;
@@ -60,7 +62,7 @@ class UserRepository {
         }
 
         const data: Promise<ListUserProps | null> = await UserRepository.model
-            .findOne({ email }, ['_id', 'firstName', 'lastName'])
+            .findOne({ email }, this.publicFields)
             .exec();
 
         return data;
@@ -74,10 +76,23 @@ class UserRepository {
         const updatedData: Promise<ListUserProps> = await UserRepository.model.findByIdAndUpdate(
             id,
             updateData,
-            { returnDocument: 'after', select: 'firstName lastName email' },
+            { returnDocument: 'after', select: this.publicFields.join(' ') },
         );
 
         return updatedData;
+    }
+
+    public async deleteUser(id: string) {
+        if (!UserRepository.model) {
+            throw new Error('Mongoose not initialized');
+        }
+
+        const deleteUserData: Promise<ListUserProps> = await UserRepository.model.findByIdAndDelete(
+            id,
+            { select: this.publicFields },
+        );
+
+        return deleteUserData;
     }
 }
 

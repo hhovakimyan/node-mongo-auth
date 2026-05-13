@@ -8,5 +8,6 @@ const router = express.Router();
 router.get('/', UserController.listAllUsers);
 router.get('/:id', UserController.getUserData);
 router.patch('/:id', validate(updateUserSchema), UserController.updateUserData);
+router.delete('/:id', UserController.deleteUser);
 
 export default router;

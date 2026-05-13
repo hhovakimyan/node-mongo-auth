@@ -46,6 +46,24 @@ class UserController {
             res.status(500).json({ message: 'Updating user failed' });
         }
     }
+
+    public static async deleteUser(req: Request<{ id: string }>, res: Response) {
+        const mongooseRepo = new UserRepository();
+        const instance = await mongooseRepo.getInstance();
+
+        const userId = req.params.id;
+        try {
+            const response = await instance.deleteUser(userId);
+            if (!response) {
+                res.status(404).json({ message: 'User not found' });
+                return;
+            }
+
+            res.status(204).json({});
+        } catch (error) {
+            res.status(500).json({ message: 'Deleting user failed' });
+        }
+    }
 }
 
 export default UserController;
