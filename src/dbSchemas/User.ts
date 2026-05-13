@@ -9,9 +9,6 @@ export type UserSchemaProps = {
 };
 
 export const UserSchema = {
-    _id: {
-        type: Types.ObjectId,
-    },
     firstName: {
         type: String,
         trim: true,
@@ -23,6 +20,7 @@ export const UserSchema = {
     email: {
         type: String,
         lowercase: true,
+        unique: true,
     },
     password: String,
 };

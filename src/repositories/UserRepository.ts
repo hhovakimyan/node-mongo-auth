@@ -11,7 +11,7 @@ import type { UpdateUserParams } from '#types/Controllers';
 class UserRepository {
     private static model: Model<UserSchemaProps> | undefined;
 
-    private publicFields: string[] = ['_id', 'firstName', 'lastName', 'email'];
+    private publicFields: string[] = ['firstName', 'lastName', 'email'];
 
     public async getInstance(): Promise<UserRepository> {
         if (!UserRepository.model) {
@@ -49,12 +49,12 @@ class UserRepository {
         return UserRepository.model.findById(id, this.publicFields).exec();
     }
 
-    public async findUserByEmail(email: string) {
+    public async findUserByEmail(email: string): Promise<UserSchemaProps> {
         if (!UserRepository.model) {
             throw new Error('Mongoose not initialized');
         }
 
-        return UserRepository.model.findOne({ email }, this.publicFields).exec();
+        return UserRepository.model.findOne({ email }).exec();
     }
 
     public async updateUser(id: string, updateData: UpdateUserParams) {
