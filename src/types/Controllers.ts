@@ -1,7 +1,7 @@
-import type { UserProps } from '#types/DataModels';
+import type { UserSchemaProps } from '#dbSchemas/User';
 
-export type RegisterUserParams = Omit<UserProps, '_id'> & {
+export type RegisterUserParams = Omit<UserSchemaProps, '_id'> & {
     passwordConfirm: string;
 };
 
-export type UpdateUserParams = Partial<Omit<UserProps, '_id' | 'password' | 'email'>>;
+export type UpdateUserParams = Partial<Omit<UserSchemaProps, '_id' | 'password' | 'email'>>;

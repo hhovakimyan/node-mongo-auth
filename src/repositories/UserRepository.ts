@@ -1,21 +1,22 @@
 import type { Model } from 'mongoose';
+import { Schema } from 'mongoose';
 
 import MongooseClient from '#integrations/MongoDb/MongooseClient';
-import type { CreateUserProps, ListUserProps } from '#types/DataModels';
-import { UserSchema } from '#dbSchemas/User';
+import type { CreateUserProps } from '#types/DataModels';
+import { UserSchema, type UserSchemaProps } from '#dbSchemas/User';
 import type { UpdateUserParams } from '#types/Controllers';
 
 // TODO think about making repos single-tone
 // TODO think about dependency injection in Node.js
 class UserRepository {
-    private static model: Model | undefined;
+    private static model: Model<UserSchemaProps> | undefined;
 
     private publicFields: string[] = ['_id', 'firstName', 'lastName', 'email'];
 
     public async getInstance(): Promise<UserRepository> {
         if (!UserRepository.model) {
             const mongoose = await MongooseClient.getInstance();
-            UserRepository.model = mongoose.model('User', UserSchema);
+            UserRepository.model = mongoose.model<UserSchemaProps>('User', new Schema(UserSchema));
         }
 
         return this;
@@ -37,11 +38,7 @@ class UserRepository {
             throw new Error('Mongoose not initialized');
         }
 
-        const data: Promise<ListUserProps[]> = await UserRepository.model
-            .find({}, this.publicFields)
-            .exec();
-
-        return data;
+        return UserRepository.model.find({}, this.publicFields).exec();
     }
 
     public async findUserById(id: string) {
@@ -49,11 +46,7 @@ class UserRepository {
             throw new Error('Mongoose not initialized');
         }
 
-        const data: Promise<ListUserProps | null> = await UserRepository.model
-            .findById(id, this.publicFields)
-            .exec();
-
-        return data;
+        return UserRepository.model.findById(id, this.publicFields).exec();
     }
 
     public async findUserByEmail(email: string) {
@@ -61,11 +54,7 @@ class UserRepository {
             throw new Error('Mongoose not initialized');
         }
 
-        const data: Promise<ListUserProps | null> = await UserRepository.model
-            .findOne({ email }, this.publicFields)
-            .exec();
-
-        return data;
+        return UserRepository.model.findOne({ email }, this.publicFields).exec();
     }
 
     public async updateUser(id: string, updateData: UpdateUserParams) {
@@ -73,13 +62,10 @@ class UserRepository {
             throw new Error('Mongoose not initialized');
         }
 
-        const updatedData: Promise<ListUserProps> = await UserRepository.model.findByIdAndUpdate(
-            id,
-            updateData,
-            { returnDocument: 'after', select: this.publicFields.join(' ') },
-        );
-
-        return updatedData;
+        return UserRepository.model.findByIdAndUpdate(id, updateData, {
+            returnDocument: 'after',
+            select: this.publicFields.join(' '),
+        });
     }
 
     public async deleteUser(id: string) {
@@ -87,12 +73,7 @@ class UserRepository {
             throw new Error('Mongoose not initialized');
         }
 
-        const deleteUserData: Promise<ListUserProps> = await UserRepository.model.findByIdAndDelete(
-            id,
-            { select: this.publicFields },
-        );
-
-        return deleteUserData;
+        return UserRepository.model.findByIdAndDelete(id, { select: this.publicFields });
     }
 }
 

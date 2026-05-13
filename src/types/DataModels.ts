@@ -1,11 +1,3 @@
-export type UserProps = {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-};
+import type { UserSchemaProps } from '#dbSchemas/User';
 
-export type ListUserProps = Omit<UserProps, 'password'>;
-
-export type CreateUserProps = Omit<UserProps, '_id'>;
+export type CreateUserProps = Omit<UserSchemaProps, '_id'>;
