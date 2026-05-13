@@ -3,7 +3,7 @@ import type { UpdateUserParams } from '#types/Controllers';
 import UserRepository from '#repositories/UserRepository';
 
 class UserController {
-    public static async listAllUsers(req: Request, res: Response) {
+    public static async listAllUsers(_req: Request, res: Response) {
         const mongooseRepo = new UserRepository();
         const instance = await mongooseRepo.getInstance();
         const response = await instance.listAllUsers();
