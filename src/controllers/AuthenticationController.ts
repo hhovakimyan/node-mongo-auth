@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 import UserRepository from '#repositories/UserRepository';
 import type { RegisterUserParams } from '#types/Controllers';
 
@@ -15,7 +16,15 @@ class AuthenticationController {
             return;
         }
 
-        const response = await instance.createUser({ email, password, firstName, lastName });
+        // TODO move this somewhere like service
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const response = await instance.createUser({
+            email,
+            password: hashedPassword,
+            firstName,
+            lastName,
+        });
 
         res.status(201).json({ userId: response });
     }
