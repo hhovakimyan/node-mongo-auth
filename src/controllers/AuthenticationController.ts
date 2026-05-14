@@ -58,7 +58,7 @@ class AuthenticationController {
 
     private static generateJwtToken(userId: string) {
         return jwt.sign({ data: userId }, process.env.JWT_SECRET, {
-            expiresIn: '1h',
+            expiresIn: '5 minutes',
         });
     }
 }
