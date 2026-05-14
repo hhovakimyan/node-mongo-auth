@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import UserRepository from '#repositories/UserRepository';
 import type { LoginUserParams, RegisterUserParams } from '#types/Controllers';
+import jwt from 'jsonwebtoken';
 
 class AuthenticationController {
     public static async registerUser(req: Request<{}, {}, RegisterUserParams>, res: Response) {
@@ -26,11 +27,13 @@ class AuthenticationController {
             lastName,
         });
 
-        res.status(201).json({ userId: response });
+        const authToken = AuthenticationController.generateJwtToken(response);
+
+        res.status(200).json({ token: authToken });
     }
 
     public static async login(req: Request<{}, {}, LoginUserParams>, res: Response) {
-        const { email, password } = req.body;
+        const { email, password: plainTextPassword } = req.body;
 
         const userRepo = new UserRepository();
         const instance = await userRepo.getInstance();
@@ -41,14 +44,22 @@ class AuthenticationController {
             return;
         }
 
-        const isPasswordCorrect = await bcrypt.compare(password, targetUser.password);
+        const isPasswordCorrect = await bcrypt.compare(plainTextPassword, targetUser.password);
         if (!isPasswordCorrect) {
             res.status(401).json({ message: 'Invalid login creds' });
 
             return;
         }
 
-        res.status(200).json({});
+        const authToken = AuthenticationController.generateJwtToken(targetUser._id);
+
+        res.status(200).json({ token: authToken });
+    }
+
+    private static generateJwtToken(userId: string) {
+        return jwt.sign({ data: userId }, process.env.JWT_SECRET, {
+            expiresIn: '1h',
+        });
     }
 }
 
