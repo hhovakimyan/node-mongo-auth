@@ -18,7 +18,9 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
     const authToken = authHeader.replace('Bearer ', '');
 
     try {
-        jwt.verify(authToken, process.env.JWT_SECRET);
+        const decoded = jwt.verify(authToken, process.env.JWT_SECRET);
+
+        req.authUserId = decoded.data;
 
         next();
     } catch (error) {

@@ -5,9 +5,10 @@ import { updateUserSchema } from '#validation/UpdateUserSchema';
 
 const router = express.Router();
 
-router.get('/', UserController.listAllUsers);
-router.get('/:id', UserController.getUserData);
-router.patch('/:id', validate(updateUserSchema), UserController.updateUserData);
-router.delete('/:id', UserController.deleteUser);
+router
+    .route('/me')
+    .get(UserController.getProfile)
+    .patch(validate(updateUserSchema), UserController.updateProfile)
+    .delete(UserController.deleteProfile);
 
 export default router;

@@ -3,39 +3,23 @@ import type { UpdateUserParams } from '#types/Controllers';
 import UserRepository from '#repositories/UserRepository';
 
 class UserController {
-    public static async listAllUsers(_req: Request, res: Response) {
-        const mongooseRepo = new UserRepository();
-        const instance = await mongooseRepo.getInstance();
-        const response = await instance.listAllUsers();
+    public static async getProfile(req: Request, res: Response) {
+        const userRepo = new UserRepository();
+        const instance = await userRepo.getInstance();
+        const response = await instance.findUserById(req.authUserId);
 
         res.status(200).json({ data: response });
     }
 
-    public static async getUserData(req: Request<{ id: string }>, res: Response) {
-        const mongooseRepo = new UserRepository();
-        const instance = await mongooseRepo.getInstance();
-
-        const userId = req.params.id;
-        const response = await instance.findUserById(userId);
-        if (!response) {
-            res.status(404).json({ message: 'User not found' });
-
-            return;
-        }
-
-        res.status(200).json({ data: response });
-    }
-
-    public static async updateUserData(
+    public static async updateProfile(
         req: Request<{ id: string }, {}, UpdateUserParams>,
         res: Response,
     ) {
-        const mongooseRepo = new UserRepository();
-        const instance = await mongooseRepo.getInstance();
+        const userRepo = new UserRepository();
+        const instance = await userRepo.getInstance();
 
-        const userId = req.params.id;
         try {
-            const response = await instance.updateUser(userId, req.body);
+            const response = await instance.updateUser(req.authUserId, req.body);
             if (!response) {
                 res.status(404).json({ message: 'User not found' });
                 return;
@@ -47,13 +31,12 @@ class UserController {
         }
     }
 
-    public static async deleteUser(req: Request<{ id: string }>, res: Response) {
-        const mongooseRepo = new UserRepository();
-        const instance = await mongooseRepo.getInstance();
+    public static async deleteProfile(req: Request<{ id: string }>, res: Response) {
+        const userRepo = new UserRepository();
+        const instance = await userRepo.getInstance();
 
-        const userId = req.params.id;
         try {
-            const response = await instance.deleteUser(userId);
+            const response = await instance.deleteUser(req.authUserId);
             if (!response) {
                 res.status(404).json({ message: 'User not found' });
                 return;
