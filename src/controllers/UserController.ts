@@ -24,7 +24,7 @@ class UserController {
             }
 
             res.status(200).json({ data: response });
-        } catch (error) {
+        } catch (_error) {
             res.status(500).json({ message: 'Updating user failed' });
         }
     }
@@ -41,7 +41,7 @@ class UserController {
             }
 
             res.status(204).json({});
-        } catch (error) {
+        } catch (_error) {
             res.status(500).json({ message: 'Deleting user failed' });
         }
     }

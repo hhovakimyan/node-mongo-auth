@@ -22,7 +22,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     let decoded: JwtPayload | null;
     try {
         decoded = jwt.verify(authToken, process.env.JWT_SECRET) as JwtPayload;
-    } catch (error) {
+    } catch (_error) {
         res.status(401).send();
         return;
     }

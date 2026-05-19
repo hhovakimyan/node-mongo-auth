@@ -9,7 +9,7 @@ class RedisClient {
             try {
                 RedisClient.client = await createClient();
                 await RedisClient.connect();
-            } catch (e) {
+            } catch (_e) {
                 throw new Error('Connecting to Redis failed');
             }
         }
@@ -18,7 +18,7 @@ class RedisClient {
     public static async connect() {
         try {
             await RedisClient.client?.connect();
-        } catch (e) {
+        } catch (_e) {
             throw new Error('Connecting to Redis failed');
         }
     }
