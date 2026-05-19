@@ -49,7 +49,7 @@ class UserRepository {
         return UserRepository.model.findById(id, this.publicFields).exec();
     }
 
-    public async findUserByEmail(email: string): Promise<UserSchemaProps> {
+    public async findUserByEmail(email: string): Promise<UserSchemaProps | null> {
         if (!UserRepository.model) {
             throw new Error('Mongoose not initialized');
         }

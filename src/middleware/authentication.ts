@@ -21,15 +21,17 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
     let decoded: JwtPayload | null;
     try {
-        decoded = jwt.verify(authToken, process.env.JWT_SECRET);
+        decoded = jwt.verify(authToken, process.env.JWT_SECRET) as JwtPayload;
     } catch (error) {
-        return res.status(401).send();
+        res.status(401).send();
+        return;
     }
 
     // Check if auth token is in blacklist
     const isBlacklisted = (await RedisClient.getClient()?.get(authToken)) !== null;
     if (isBlacklisted) {
-        return res.status(401).send();
+        res.status(401).send();
+        return;
     }
 
     req.authUserId = decoded.data;

@@ -12,10 +12,7 @@ class UserController {
         res.status(200).json({ data: response });
     }
 
-    public static async updateProfile(
-        req: Request<{ id: string }, {}, UpdateUserParams>,
-        res: Response,
-    ) {
+    public static async updateProfile(req: Request<{}, {}, UpdateUserParams>, res: Response) {
         const userRepo = new UserRepository();
         const instance = await userRepo.getInstance();
 
@@ -32,7 +29,7 @@ class UserController {
         }
     }
 
-    public static async deleteProfile(req: Request<{ id: string }>, res: Response) {
+    public static async deleteProfile(req: Request, res: Response) {
         const userRepo = new UserRepository();
         const instance = await userRepo.getInstance();
 

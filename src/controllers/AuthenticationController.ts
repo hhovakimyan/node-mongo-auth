@@ -53,16 +53,14 @@ class AuthenticationController {
             return;
         }
 
-        const authToken = AuthenticationController.generateJwtToken(targetUser._id);
+        const authToken = AuthenticationController.generateJwtToken(targetUser._id.toHexString());
 
         res.status(200).json({ token: authToken });
     }
 
     public static async logout(req: Request<{}, {}, LoginUserParams>, res: Response) {
-        const authToken = req.authToken as string;
-
         // Store logged out auth token for 5 minutes
-        RedisClient.getClient()?.set(authToken, '', { EX: 21600 });
+        RedisClient.getClient()?.set(req.authToken, '', { EX: 21600 });
 
         res.status(204).send();
     }
