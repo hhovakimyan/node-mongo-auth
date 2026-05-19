@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import UserRepository from '#repositories/UserRepository';
 import type { LoginUserParams, RegisterUserParams } from '#types/Controllers';
 import jwt from 'jsonwebtoken';
+import RedisClient from '#integrations/Redis/RedisClient';
 
 class AuthenticationController {
     public static async registerUser(req: Request<{}, {}, RegisterUserParams>, res: Response) {
@@ -56,9 +57,18 @@ class AuthenticationController {
         res.status(200).json({ token: authToken });
     }
 
+    public static async logout(req: Request<{}, {}, LoginUserParams>, res: Response) {
+        const authToken = req.authToken as string;
+
+        // Store logged out auth token for 5 minutes
+        RedisClient.getClient()?.set(authToken, '', { EX: 21600 });
+
+        res.status(204).send();
+    }
+
     private static generateJwtToken(userId: string) {
         return jwt.sign({ data: userId }, process.env.JWT_SECRET, {
-            expiresIn: '5 minutes',
+            expiresIn: '6 hours',
         });
     }
 }

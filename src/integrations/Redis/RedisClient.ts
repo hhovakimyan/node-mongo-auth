@@ -1,5 +1,6 @@
 import { createClient, type RedisClientType } from 'redis';
 
+// TODO check for connection loosing
 class RedisClient {
     private static client: RedisClientType | null = null;
 
