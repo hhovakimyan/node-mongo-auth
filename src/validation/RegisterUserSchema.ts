@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+
 import type { RegisterUserParams } from '#types/Controllers';
 
 export const registerUserSchema: yup.ObjectSchema<RegisterUserParams> = yup.object({

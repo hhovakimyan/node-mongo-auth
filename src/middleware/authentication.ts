@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
+
 import RedisClient from '#integrations/Redis/RedisClient';
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {

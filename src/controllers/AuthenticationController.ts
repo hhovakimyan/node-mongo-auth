@@ -1,9 +1,10 @@
-import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import type { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+
+import RedisClient from '#integrations/Redis/RedisClient';
 import UserRepository from '#repositories/UserRepository';
 import type { LoginUserParams, RegisterUserParams } from '#types/Controllers';
-import jwt from 'jsonwebtoken';
-import RedisClient from '#integrations/Redis/RedisClient';
 
 class AuthenticationController {
     public static async registerUser(req: Request<{}, {}, RegisterUserParams>, res: Response) {

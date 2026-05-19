@@ -1,10 +1,10 @@
-import express from 'express';
 import dotenv from 'dotenv';
+import express from 'express';
 
+import RedisClient from '#integrations/Redis/RedisClient';
+import { auth } from '#middleware/authentication';
 import authRouter from '#routes/auth';
 import userRouter from '#routes/user';
-import { auth } from '#middleware/authentication';
-import RedisClient from '#integrations/Redis/RedisClient';
 
 // Load environment variables
 dotenv.config();

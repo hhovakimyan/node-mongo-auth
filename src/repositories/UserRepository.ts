@@ -1,10 +1,10 @@
-import type { Model } from 'mongoose';
 import { Schema } from 'mongoose';
+import type { Model } from 'mongoose';
 
-import MongooseClient from '#integrations/MongoDb/MongooseClient';
-import type { CreateUserProps } from '#types/DataModels';
 import { UserSchema, type UserSchemaProps } from '#dbSchemas/User';
+import MongooseClient from '#integrations/MongoDb/MongooseClient';
 import type { UpdateUserParams } from '#types/Controllers';
+import type { CreateUserProps } from '#types/DataModels';
 
 // TODO think about making repos single-tone
 // TODO think about dependency injection in Node.js

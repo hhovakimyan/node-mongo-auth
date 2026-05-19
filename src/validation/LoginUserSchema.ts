@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+
 import type { LoginUserParams } from '#types/Controllers';
 import { registerUserSchema } from '#validation/RegisterUserSchema';
 

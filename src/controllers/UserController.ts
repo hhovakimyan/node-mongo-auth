@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
-import type { UpdateUserParams } from '#types/Controllers';
+
 import UserRepository from '#repositories/UserRepository';
+import type { UpdateUserParams } from '#types/Controllers';
 
 class UserController {
     public static async getProfile(req: Request, res: Response) {
