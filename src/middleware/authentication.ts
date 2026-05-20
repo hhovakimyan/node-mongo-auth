@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import jwt, { type JwtPayload } from 'jsonwebtoken';
 
-import RedisClient from '#integrations/Redis/RedisClient';
+import AuthenticationService from '#services/AuthenticationService';
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
     if (req.path === '/auth/login' || req.path === '/auth/register') {
@@ -19,22 +18,19 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
     const authToken = authHeader.replace('Bearer ', '');
 
-    let decoded: JwtPayload | null;
-    try {
-        decoded = jwt.verify(authToken, process.env.JWT_SECRET) as JwtPayload;
-    } catch (_error) {
+    const authUserId = AuthenticationService.validateAndGetUserId(authToken);
+    if (!authUserId) {
         res.status(401).send();
         return;
     }
 
-    // Check if auth token is in blacklist
-    const isBlacklisted = (await RedisClient.getClient()?.get(authToken)) !== null;
+    const isBlacklisted = await AuthenticationService.isAccessTokenBlacklisted(authToken);
     if (isBlacklisted) {
         res.status(401).send();
         return;
     }
 
-    req.authUserId = decoded.data;
+    req.authUserId = authUserId;
     req.authToken = authToken;
 
     next();

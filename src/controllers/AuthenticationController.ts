@@ -1,15 +1,13 @@
-import bcrypt from 'bcrypt';
 import type { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 
-import RedisClient from '#integrations/Redis/RedisClient';
 import UserRepository from '#repositories/UserRepository';
+import AuthenticationService from '#services/AuthenticationService';
 import type { LoginUserParams, RegisterUserParams } from '#types/Controllers';
 
 // TODO pass dependencies to AuthenticationController via dependency injection
 class AuthenticationController {
     public static async registerUser(req: Request<{}, {}, RegisterUserParams>, res: Response) {
-        const { email, password, firstName, lastName } = req.body;
+        const { email, password: plainTextPassword, firstName, lastName } = req.body;
 
         const userRepo = new UserRepository();
         const instance = await userRepo.getInstance();
@@ -20,8 +18,7 @@ class AuthenticationController {
             return;
         }
 
-        // TODO move this somewhere like service
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await AuthenticationService.hashPassword(plainTextPassword);
 
         const response = await instance.createUser({
             email,
@@ -30,7 +27,7 @@ class AuthenticationController {
             lastName,
         });
 
-        const authToken = AuthenticationController.generateJwtToken(response);
+        const authToken = AuthenticationService.createAccessToken(response);
 
         res.status(200).json({ token: authToken });
     }
@@ -47,29 +44,25 @@ class AuthenticationController {
             return;
         }
 
-        const isPasswordCorrect = await bcrypt.compare(plainTextPassword, targetUser.password);
+        const isPasswordCorrect = await AuthenticationService.verifyPassword(
+            plainTextPassword,
+            targetUser.password,
+        );
         if (!isPasswordCorrect) {
             res.status(401).json({ message: 'Invalid login creds' });
 
             return;
         }
 
-        const authToken = AuthenticationController.generateJwtToken(targetUser._id.toHexString());
+        const authToken = AuthenticationService.createAccessToken(targetUser._id.toHexString());
 
         res.status(200).json({ token: authToken });
     }
 
     public static async logout(req: Request<{}, {}, LoginUserParams>, res: Response) {
-        // Store logged out auth token for 5 minutes
-        RedisClient.getClient()?.set(req.authToken, '', { EX: 21600 });
+        AuthenticationService.invalidateToken(req.authToken);
 
         res.status(204).send();
-    }
-
-    private static generateJwtToken(userId: string) {
-        return jwt.sign({ data: userId }, process.env.JWT_SECRET, {
-            expiresIn: '6 hours',
-        });
     }
 }
 
