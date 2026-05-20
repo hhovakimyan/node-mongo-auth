@@ -6,6 +6,7 @@ import RedisClient from '#integrations/Redis/RedisClient';
 import UserRepository from '#repositories/UserRepository';
 import type { LoginUserParams, RegisterUserParams } from '#types/Controllers';
 
+// TODO pass dependencies to AuthenticationController via dependency injection
 class AuthenticationController {
     public static async registerUser(req: Request<{}, {}, RegisterUserParams>, res: Response) {
         const { email, password, firstName, lastName } = req.body;
