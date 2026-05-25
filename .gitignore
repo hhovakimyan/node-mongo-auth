@@ -4,5 +4,3 @@ dist/
 .env
 PROJECT_TODOS.md
 .claude/agent-memory-local
-tests/math.test.ts
-src/math.ts
