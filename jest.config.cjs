@@ -5,7 +5,10 @@ module.exports = {
     transform: {
         '^.+\\.ts?$': ['ts-jest', { useESM: true }],
     },
+    clearMocks: true,
     moduleNameMapper: {
+        '^#integrations/Redis/RedisClient$':
+            '<rootDir>/src/integrations/Redis/__mocks__/RedisClient.ts',
         '^#controllers/(.*)$': '<rootDir>/src/controllers/$1',
         '^#middleware/(.*)$': '<rootDir>/src/middleware/$1',
         '^#repositories/(.*)$': '<rootDir>/src/repositories/$1',
