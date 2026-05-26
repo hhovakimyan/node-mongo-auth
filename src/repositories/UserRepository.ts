@@ -1,87 +1,50 @@
-import { Schema } from 'mongoose';
 import type { Model } from 'mongoose';
 
-import { UserSchema, type UserSchemaProps } from '#dbSchemas/User';
-import MongooseClient from '#integrations/MongoDb/MongooseClient';
+import { type UserSchemaProps } from '#dbSchemas/User';
 import type { UpdateUserParams } from '#types/Controllers';
 import type { CreateUserProps } from '#types/DataModels';
 
 // TODO think about making repos single-tone
-// TODO think about dependency injection in Node.js
 class UserRepository {
-    private static model: Model<UserSchemaProps> | undefined;
-
+    private model: Model<UserSchemaProps>;
     private publicFields: string[] = ['firstName', 'lastName', 'email'];
 
-    public async getInstance(): Promise<UserRepository> {
-        if (!UserRepository.model) {
-            const mongoose = await MongooseClient.getInstance();
-            UserRepository.model = mongoose.model<UserSchemaProps>('User', new Schema(UserSchema));
-        }
-
-        return this;
+    public constructor(model: Model<UserSchemaProps>) {
+        this.model = model;
     }
 
     public async createUser(user: CreateUserProps): Promise<string> {
-        if (!UserRepository.model) {
-            throw new Error('Mongoose not initialized');
-        }
-
-        const newUser = new UserRepository.model(user);
+        const newUser = new this.model(user);
         const createdUser = await newUser.save();
 
         return createdUser._id.toHexString();
     }
 
     public async listAllUsers() {
-        if (!UserRepository.model) {
-            throw new Error('Mongoose not initialized');
-        }
-
-        return UserRepository.model.find({}, this.publicFields).exec();
+        return this.model.find({}, this.publicFields).exec();
     }
 
     public async findUserById(id: string) {
-        if (!UserRepository.model) {
-            throw new Error('Mongoose not initialized');
-        }
-
-        return UserRepository.model.findById(id, this.publicFields).exec();
+        return this.model.findById(id, this.publicFields).exec();
     }
 
     public async findUserByEmail(email: string): Promise<UserSchemaProps | null> {
-        if (!UserRepository.model) {
-            throw new Error('Mongoose not initialized');
-        }
-
-        return UserRepository.model.findOne({ email }).exec();
+        return this.model.findOne({ email }).exec();
     }
 
     public async updateUser(id: string, updateData: UpdateUserParams) {
-        if (!UserRepository.model) {
-            throw new Error('Mongoose not initialized');
-        }
-
-        return UserRepository.model.findByIdAndUpdate(id, updateData, {
+        return this.model.findByIdAndUpdate(id, updateData, {
             returnDocument: 'after',
             select: this.publicFields.join(' '),
         });
     }
 
     public async deleteUser(id: string) {
-        if (!UserRepository.model) {
-            throw new Error('Mongoose not initialized');
-        }
-
-        return UserRepository.model.findByIdAndDelete(id, { select: this.publicFields });
+        return this.model.findByIdAndDelete(id, { select: this.publicFields });
     }
 
     public async deleteAllUsers() {
-        if (!UserRepository.model) {
-            throw new Error('Mongoose not initialized');
-        }
-
-        return UserRepository.model.deleteMany();
+        return this.model.deleteMany();
     }
 }
 
