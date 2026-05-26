@@ -39,7 +39,7 @@ test('createAccessToken works correct', () => {
     const result = AuthenticationService.createAccessToken('6a05c3f518d80eb79379a732');
 
     expect(result).toBe('somejwt');
-    expect(jestSpy).toBeCalledWith({ data: '6a05c3f518d80eb79379a732' }, undefined, {
+    expect(jestSpy).toBeCalledWith({ data: '6a05c3f518d80eb79379a732' }, 'my_secret', {
         expiresIn: 21600,
     });
 });

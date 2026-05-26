@@ -20,4 +20,5 @@ module.exports = {
         '^#routes/(.*)$': '<rootDir>/src/routes/$1',
         '^#services/(.*)$': '<rootDir>/src/services/$1',
     },
+    setupFiles: ['<rootDir>/jest.setup.js'],
 };

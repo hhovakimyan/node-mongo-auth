@@ -29,7 +29,7 @@ class AuthenticationController {
 
         const authToken = AuthenticationService.createAccessToken(response);
 
-        res.status(200).json({ token: authToken });
+        res.status(201).json({ token: authToken });
     }
 
     public static async login(req: Request<{}, {}, LoginUserParams>, res: Response) {
