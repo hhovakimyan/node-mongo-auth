@@ -75,6 +75,14 @@ class UserRepository {
 
         return UserRepository.model.findByIdAndDelete(id, { select: this.publicFields });
     }
+
+    public async deleteAllUsers() {
+        if (!UserRepository.model) {
+            throw new Error('Mongoose not initialized');
+        }
+
+        return UserRepository.model.deleteMany();
+    }
 }
 
 export default UserRepository;

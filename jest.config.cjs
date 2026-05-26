@@ -2,6 +2,7 @@ module.exports = {
     extensionsToTreatAsEsm: ['.ts'],
     testEnvironment: 'node',
     testMatch: ['**/tests/**/*.test.ts'],
+    maxWorkers: 1,
     transform: {
         '^.+\\.ts?$': ['ts-jest', { useESM: true }],
     },
