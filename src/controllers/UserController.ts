@@ -4,20 +4,21 @@ import UserRepository from '#repositories/UserRepository';
 import type { UpdateUserParams } from '#types/Controllers';
 
 class UserController {
-    public static async getProfile(req: Request, res: Response) {
-        const userRepo = new UserRepository();
-        const instance = await userRepo.getInstance();
-        const response = await instance.findUserById(req.authUserId);
+    private userRepository: UserRepository;
+
+    public constructor(userRepository: UserRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public async getProfile(req: Request, res: Response) {
+        const response = await this.userRepository.findUserById(req.authUserId);
 
         res.status(200).json({ data: response });
     }
 
-    public static async updateProfile(req: Request<{}, {}, UpdateUserParams>, res: Response) {
-        const userRepo = new UserRepository();
-        const instance = await userRepo.getInstance();
-
+    public async updateProfile(req: Request<{}, {}, UpdateUserParams>, res: Response) {
         try {
-            const response = await instance.updateUser(req.authUserId, req.body);
+            const response = await this.userRepository.updateUser(req.authUserId, req.body);
             if (!response) {
                 res.status(404).json({ message: 'User not found' });
                 return;
@@ -29,12 +30,9 @@ class UserController {
         }
     }
 
-    public static async deleteProfile(req: Request, res: Response) {
-        const userRepo = new UserRepository();
-        const instance = await userRepo.getInstance();
-
+    public async deleteProfile(req: Request, res: Response) {
         try {
-            const response = await instance.deleteUser(req.authUserId);
+            const response = await this.userRepository.deleteUser(req.authUserId);
             if (!response) {
                 res.status(404).json({ message: 'User not found' });
                 return;

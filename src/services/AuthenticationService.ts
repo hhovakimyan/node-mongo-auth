@@ -7,16 +7,16 @@ class AuthenticationService {
     static readonly accessTokenExpTime: number = 21600;
     static readonly passwordHashSaltRounds: number = 10;
 
-    public static async hashPassword(plainTextPassword: string) {
+    public async hashPassword(plainTextPassword: string) {
         return await bcrypt.hash(plainTextPassword, AuthenticationService.passwordHashSaltRounds);
     }
 
-    public static async verifyPassword(plainTextPassword: string, hashedPassword: string) {
+    public async verifyPassword(plainTextPassword: string, hashedPassword: string) {
         const result = await bcrypt.compare(plainTextPassword, hashedPassword);
         return result;
     }
 
-    public static createAccessToken(userId: string) {
+    public createAccessToken(userId: string) {
         return jwt.sign({ data: userId }, process.env.JWT_SECRET, {
             expiresIn: AuthenticationService.accessTokenExpTime,
         });
@@ -35,7 +35,7 @@ class AuthenticationService {
         return (await RedisClient.getClient()?.get(accessToken)) !== null;
     }
 
-    public static invalidateToken(accessToken: string) {
+    public invalidateToken(accessToken: string) {
         RedisClient.getClient()?.set(accessToken, '', {
             EX: AuthenticationService.accessTokenExpTime,
         });

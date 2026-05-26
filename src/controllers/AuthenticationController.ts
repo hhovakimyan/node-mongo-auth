@@ -4,47 +4,53 @@ import UserRepository from '#repositories/UserRepository';
 import AuthenticationService from '#services/AuthenticationService';
 import type { LoginUserParams, RegisterUserParams } from '#types/Controllers';
 
-// TODO pass dependencies to AuthenticationController via dependency injection
 class AuthenticationController {
-    public static async registerUser(req: Request<{}, {}, RegisterUserParams>, res: Response) {
+    private authenticationService: AuthenticationService;
+    private userRepository: UserRepository;
+
+    public constructor(
+        authenticationService: AuthenticationService,
+        userRepository: UserRepository,
+    ) {
+        this.authenticationService = authenticationService;
+        this.userRepository = userRepository;
+    }
+
+    public async registerUser(req: Request<{}, {}, RegisterUserParams>, res: Response) {
         const { email, password: plainTextPassword, firstName, lastName } = req.body;
 
-        const userRepo = new UserRepository();
-        const instance = await userRepo.getInstance();
-        const userWithSameEmail = await instance.findUserByEmail(email);
+        const userWithSameEmail = await this.userRepository.findUserByEmail(email);
         if (userWithSameEmail) {
             res.status(400).json({ errors: ['User with same email is already registered'] });
 
             return;
         }
 
-        const hashedPassword = await AuthenticationService.hashPassword(plainTextPassword);
+        const hashedPassword = await this.authenticationService.hashPassword(plainTextPassword);
 
-        const response = await instance.createUser({
+        const response = await this.userRepository.createUser({
             email,
             password: hashedPassword,
             firstName,
             lastName,
         });
 
-        const authToken = AuthenticationService.createAccessToken(response);
+        const authToken = this.authenticationService.createAccessToken(response);
 
         res.status(201).json({ token: authToken });
     }
 
-    public static async login(req: Request<{}, {}, LoginUserParams>, res: Response) {
+    public async login(req: Request<{}, {}, LoginUserParams>, res: Response) {
         const { email, password: plainTextPassword } = req.body;
 
-        const userRepo = new UserRepository();
-        const instance = await userRepo.getInstance();
-        const targetUser = await instance.findUserByEmail(email);
+        const targetUser = await this.userRepository.findUserByEmail(email);
         if (!targetUser) {
             res.status(401).json({ message: 'Invalid login creds' });
 
             return;
         }
 
-        const isPasswordCorrect = await AuthenticationService.verifyPassword(
+        const isPasswordCorrect = await this.authenticationService.verifyPassword(
             plainTextPassword,
             targetUser.password,
         );
@@ -54,13 +60,15 @@ class AuthenticationController {
             return;
         }
 
-        const authToken = AuthenticationService.createAccessToken(targetUser._id.toHexString());
+        const authToken = this.authenticationService.createAccessToken(
+            targetUser._id.toHexString(),
+        );
 
         res.status(200).json({ token: authToken });
     }
 
-    public static async logout(req: Request<{}, {}, LoginUserParams>, res: Response) {
-        AuthenticationService.invalidateToken(req.authToken);
+    public async logout(req: Request<{}, {}, LoginUserParams>, res: Response) {
+        this.authenticationService.invalidateToken(req.authToken);
 
         res.status(204).send();
     }

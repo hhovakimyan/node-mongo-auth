@@ -1,3 +1,4 @@
+import { makeClassInvoker } from 'awilix-express';
 import express from 'express';
 
 import UserController from '#controllers/UserController';
@@ -8,8 +9,8 @@ const router = express.Router();
 
 router
     .route('/me')
-    .get(UserController.getProfile)
-    .patch(validate(updateUserSchema), UserController.updateProfile)
-    .delete(UserController.deleteProfile);
+    .get(makeClassInvoker(UserController)('getProfile'))
+    .patch(validate(updateUserSchema), makeClassInvoker(UserController)('updateProfile'))
+    .delete(makeClassInvoker(UserController)('deleteProfile'));
 
 export default router;
