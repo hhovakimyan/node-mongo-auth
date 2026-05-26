@@ -12,8 +12,7 @@ class AuthenticationService {
     }
 
     public async verifyPassword(plainTextPassword: string, hashedPassword: string) {
-        const result = await bcrypt.compare(plainTextPassword, hashedPassword);
-        return result;
+        return await bcrypt.compare(plainTextPassword, hashedPassword);
     }
 
     public createAccessToken(userId: string) {
@@ -22,7 +21,7 @@ class AuthenticationService {
         });
     }
 
-    public static validateAndGetUserId(accessToken: string): string | null {
+    public validateAndGetUserId(accessToken: string): string | null {
         try {
             const jwtPayload = jwt.verify(accessToken, process.env.JWT_SECRET) as JwtPayload;
             return jwtPayload.data as number;
@@ -31,7 +30,7 @@ class AuthenticationService {
         }
     }
 
-    public static async isAccessTokenBlacklisted(accessToken: string) {
+    public async isAccessTokenBlacklisted(accessToken: string) {
         return (await RedisClient.getClient()?.get(accessToken)) !== null;
     }
 
