@@ -14,9 +14,10 @@ npm run build      # tsc (compiles to dist/)
 npm run lint       # eslint src
 npm run format     # prettier --write src
 npx tsc --noEmit   # type-check only
+npm test           # jest --watch (ESM mode via --experimental-vm-modules)
 ```
 
-Tests are not yet set up — `npm test` is a placeholder.
+Tests use Jest 29 with `ts-jest` in ESM mode. Config is in `jest.config.cjs`; setup loads `.env.test` for test-scoped environment variables. Test files live in `tests/` mirroring the `src/` structure (`tests/controllers/`, `tests/services/`). Mocks for `bcrypt` and `RedisClient` live in `__mocks__/` and `src/integrations/Redis/__mocks__/` respectively.
 
 ## Architecture
 
