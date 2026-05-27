@@ -24,7 +24,7 @@ class AuthenticationService {
     public validateAndGetUserId(accessToken: string): string | null {
         try {
             const jwtPayload = jwt.verify(accessToken, process.env.JWT_SECRET) as JwtPayload;
-            return jwtPayload.data as number;
+            return jwtPayload.data as string;
         } catch (_error) {
             return null;
         }

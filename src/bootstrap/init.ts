@@ -2,20 +2,19 @@ import { loadControllers, scopePerRequest } from 'awilix-express';
 import dotenv from 'dotenv';
 import express from 'express';
 
+import createDiContainer from '#bootstrap/di';
 import RedisClient from '#integrations/Redis/RedisClient';
 import { auth } from '#middleware/authentication';
 import authRouter from '#routes/auth';
 import userRouter from '#routes/user';
 import { getCurrentDirPath } from '#utils/path';
 
-import createDiContainer from './di';
-
 // Load environment variables
 dotenv.config();
 
-const diContainer = await createDiContainer();
+export const diContainer = await createDiContainer();
 
-const app = express();
+export const app = express();
 app.use(scopePerRequest(diContainer));
 app.use(await loadControllers('controller/*.ts', { cwd: getCurrentDirPath() }));
 
@@ -33,5 +32,3 @@ app.use(auth);
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
-
-export default app;

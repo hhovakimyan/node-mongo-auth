@@ -23,8 +23,10 @@
         "isolatedModules": true,
         "noUncheckedSideEffectImports": true,
         "moduleDetection": "force",
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "rewriteRelativeImportExtensions": true,
+        "allowImportingTsExtensions": true
     },
-    "include": ["src/**/*.ts", "tests/**/*.test.ts"],
-    "exclude": ["node_modules", "dist"]
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "dist", "src/**/__mocks__/*.ts"]
 }

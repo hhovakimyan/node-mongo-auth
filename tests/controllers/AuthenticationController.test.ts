@@ -2,10 +2,7 @@ import { jest } from '@jest/globals';
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import request from 'supertest';
-
-import UserRepository from '#repositories/UserRepository';
-
-import app from '../../src/init';
+import { diContainer, app } from '#bootstrap/init';
 
 const testUser = {
     firstName: 'Hayk',
@@ -15,9 +12,8 @@ const testUser = {
 };
 
 beforeAll(async () => {
-    const userRepo = new UserRepository();
-    const instance = await userRepo.getInstance();
-    await instance.deleteAllUsers();
+    const userRepo = diContainer.cradle.userRepository;
+    await userRepo.deleteAllUsers();
 });
 
 afterAll(async () => {

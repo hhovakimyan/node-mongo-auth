@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
-
-import UserRepository from '#repositories/UserRepository';
-
-import app from '../../src/init';
+import { app, diContainer } from '#bootstrap/init';
 
 const testUser = {
     firstName: 'Test',
@@ -15,19 +12,14 @@ const testUser = {
 let authToken: string;
 
 beforeAll(async () => {
-    const userRepo = new UserRepository();
-    const instance = await userRepo.getInstance();
-    await instance.deleteAllUsers();
+    const userRepo = diContainer.cradle.userRepository;
+    await userRepo.deleteAllUsers();
 
     const response = await request(app)
         .post('/auth/register')
         .send({ ...testUser, passwordConfirm: testUser.password });
 
     authToken = response.body.token;
-});
-
-afterAll(async () => {
-    await mongoose.disconnect();
 });
 
 test('Get profile runs successfully', async () => {
@@ -42,4 +34,8 @@ test('Get profile runs successfully', async () => {
         lastName: testUser.lastName,
         email: testUser.email,
     });
+});
+
+afterAll(async () => {
+    await mongoose.disconnect();
 });

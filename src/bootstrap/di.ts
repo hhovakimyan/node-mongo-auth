@@ -1,10 +1,16 @@
 import { asClass, asValue, createContainer } from 'awilix';
 
+import UserRepository from '#repositories/UserRepository';
 import createUserRepositoryFactory from '#repositories/UserRepositoryFactory';
 import AuthenticationService from '#services/AuthenticationService';
 
+export interface DiCradle {
+    authenticationService: AuthenticationService;
+    userRepository: UserRepository;
+}
+
 const createDiContainer = async () => {
-    const diContainer = createContainer({
+    const diContainer = createContainer<DiCradle>({
         injectionMode: 'CLASSIC',
     });
 
