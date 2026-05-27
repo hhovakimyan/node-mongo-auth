@@ -8,9 +8,10 @@
         "start": "npx tsx --watch src/index.ts",
         "build": "tsc",
         "test": "node --experimental-vm-modules node_modules/jest-cli/bin/jest.js --watch",
-        "lint": "eslint src",
-        "format": "prettier --write src",
-        "format:check": "prettier --check src"
+        "lint": "eslint src/ tests/",
+        "lint:fix": "eslint --fix src/ tests/",
+        "format": "prettier --write \"{src,tests}/**/*.ts\"",
+        "format:check": "prettier --check \"{src,tests}/**/*.ts\""
     },
     "imports": {
         "#controllers/*": {
