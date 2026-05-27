@@ -44,7 +44,7 @@ class UserRepository {
     }
 
     public async deleteAllUsers() {
-        return this.model.deleteMany();
+        await this.model.deleteMany();
     }
 }
 
