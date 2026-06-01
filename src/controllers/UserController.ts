@@ -43,6 +43,32 @@ class UserController {
             res.status(500).json({ message: 'Deleting user failed' });
         }
     }
+
+    public async uploadAvatar(req: Request, res: Response) {
+        try {
+            const response = await this.userRepository.saveAvatar(
+                req.authUserId,
+                req!.file!.buffer,
+            );
+            if (!response) {
+                res.status(404).json({ message: 'User not found' });
+                return;
+            }
+
+            res.status(200).json({ data: response });
+        } catch (_error) {
+            res.status(500).json({ message: 'Updating user avatar failed' });
+        }
+    }
+
+    public async deleteAvatar(req: Request, res: Response) {
+        try {
+            await this.userRepository.deleteAvatar(req.authUserId);
+            res.status(204).send();
+        } catch (_error) {
+            res.status(500).json({ message: 'Deleting user avatar failed' });
+        }
+    }
 }
 
 export default UserController;

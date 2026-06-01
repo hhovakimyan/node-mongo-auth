@@ -6,6 +6,7 @@ export type UserSchemaProps = {
     lastName: string;
     email: string;
     password: string;
+    avatar?: string | undefined;
 };
 
 export const UserSchema = {
@@ -23,4 +24,7 @@ export const UserSchema = {
         unique: true,
     },
     password: String,
+    avatar: {
+        type: Buffer,
+    },
 };

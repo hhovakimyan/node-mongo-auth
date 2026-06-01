@@ -46,6 +46,25 @@ class UserRepository {
     public async deleteAllUsers() {
         await this.model.deleteMany();
     }
+
+    public async saveAvatar(id: string, avatar: Buffer) {
+        return this.model.findByIdAndUpdate(
+            id,
+            { avatar },
+            {
+                returnDocument: 'after',
+                select: this.publicFields.join(' '),
+            },
+        );
+    }
+
+    public async deleteAvatar(id: string) {
+        const user = await this.findUserById(id);
+        if (user) {
+            user.avatar = undefined;
+            await user.save();
+        }
+    }
 }
 
 export default UserRepository;
