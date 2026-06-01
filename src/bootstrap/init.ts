@@ -5,6 +5,7 @@ import express from 'express';
 import createDiContainer from '#bootstrap/di';
 import RedisClient from '#integrations/Redis/RedisClient';
 import { auth } from '#middleware/authentication';
+import { errorHandler } from '#middleware/errorHandler';
 import authRouter from '#routes/auth';
 import userRouter from '#routes/user';
 import { getCurrentDirPath } from '#utils/path';
@@ -32,3 +33,5 @@ app.use(auth);
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+
+app.use(errorHandler);

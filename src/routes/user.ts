@@ -1,6 +1,5 @@
 import { makeClassInvoker } from 'awilix-express';
 import express from 'express';
-import type { Request, Response, NextFunction } from 'express';
 import multer from 'multer';
 
 import UserController from '#controllers/UserController';
@@ -20,8 +19,11 @@ const upload = multer({
         fileSize: 2000000, // 2 MB
     },
     fileFilter: (_req, file, cb) => {
-        if (!file.originalname.endsWith('.jpg') && !file.originalname.endsWith('.png')) {
-            return cb(new Error('Please upload a JPG or PNG image'));
+        const { originalname } = file;
+        const extension: string = originalname.split('.').pop();
+
+        if (!['jpg', 'png', 'jpeg'].includes(extension)) {
+            return cb(new Error('Please upload a JPG or PNG file'));
         }
 
         return cb(null, true);
@@ -32,9 +34,6 @@ router.post(
     '/me/avatar',
     upload.single('avatar'),
     makeClassInvoker(UserController)('uploadAvatar'),
-    (error: { message: string }, _req: Request, res: Response, _next: NextFunction) => {
-        res.status(400).send({ message: error.message });
-    },
 );
 
 router.delete('/me/avatar', makeClassInvoker(UserController)('deleteAvatar'));
