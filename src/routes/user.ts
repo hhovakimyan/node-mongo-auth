@@ -20,10 +20,10 @@ const upload = multer({
     },
     fileFilter: (_req, file, cb) => {
         const { originalname } = file;
-        const extension: string = originalname.split('.').pop();
+        const extension = originalname.split('.').pop() as string;
 
         if (!['jpg', 'png', 'jpeg'].includes(extension)) {
-            return cb(new Error('Please upload a JPG or PNG file'));
+            return cb(new Error('invalid_file_format'));
         }
 
         return cb(null, true);

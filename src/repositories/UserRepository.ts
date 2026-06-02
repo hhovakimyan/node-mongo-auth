@@ -4,7 +4,6 @@ import { type UserSchemaProps } from '#dbSchemas/User';
 import type { UpdateUserParams } from '#types/Controllers';
 import type { CreateUserProps } from '#types/DataModels';
 
-// TODO think about making repos single-tone
 class UserRepository {
     private model: Model<UserSchemaProps>;
     private publicFields: string[] = ['firstName', 'lastName', 'email'];

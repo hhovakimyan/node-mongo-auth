@@ -4,8 +4,6 @@ export type RegisterUserParams = Omit<UserSchemaProps, '_id' | 'avatar'> & {
     passwordConfirm: string;
 };
 
-export type UpdateUserParams = Partial<
-    Omit<UserSchemaProps, '_id' | 'password' | 'email' | 'avatar'>
->;
+export type UpdateUserParams = Partial<Pick<UserSchemaProps, 'lastName' | 'firstName'>>;
 
 export type LoginUserParams = Pick<UserSchemaProps, 'email' | 'password'>;
