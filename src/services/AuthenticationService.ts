@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 
-import RedisClient from '#integrations/Redis/RedisClient';
+import { RedisClient } from '#integrations/Redis/RedisClient';
 
-class AuthenticationService {
+export class AuthenticationService {
     static readonly accessTokenExpTime: number = 21600;
     static readonly passwordHashSaltRounds: number = 10;
 
@@ -40,5 +40,3 @@ class AuthenticationService {
         });
     }
 }
-
-export default AuthenticationService;

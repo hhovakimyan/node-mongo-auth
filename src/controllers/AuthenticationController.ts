@@ -1,10 +1,10 @@
 import type { Request, Response } from 'express';
 
-import UserRepository from '#repositories/UserRepository';
-import AuthenticationService from '#services/AuthenticationService';
+import { UserRepository } from '#repositories/UserRepository';
+import { AuthenticationService } from '#services/AuthenticationService';
 import type { LoginUserParams, RegisterUserParams } from '#types/Controllers';
 
-class AuthenticationController {
+export class AuthenticationController {
     private authenticationService: AuthenticationService;
     private userRepository: UserRepository;
 
@@ -73,5 +73,3 @@ class AuthenticationController {
         res.status(204).send();
     }
 }
-
-export default AuthenticationController;

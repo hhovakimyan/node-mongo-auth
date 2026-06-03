@@ -2,8 +2,8 @@ import { loadControllers, scopePerRequest } from 'awilix-express';
 import dotenv from 'dotenv';
 import express from 'express';
 
-import createDiContainer from '#bootstrap/di';
-import RedisClient from '#integrations/Redis/RedisClient';
+import { createDiContainer } from '#bootstrap/di';
+import { RedisClient } from '#integrations/Redis/RedisClient';
 import { auth } from '#middleware/authentication';
 import { errorHandler } from '#middleware/errorHandler';
 import authRouter from '#routes/auth';

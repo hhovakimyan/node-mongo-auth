@@ -2,8 +2,8 @@ import { jest } from '@jest/globals';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import RedisClient from '#integrations/Redis/RedisClient';
-import AuthenticationService from '#services/AuthenticationService';
+import { RedisClient } from '#integrations/Redis/RedisClient';
+import { AuthenticationService } from '#services/AuthenticationService';
 
 const authenticationService = new AuthenticationService();
 

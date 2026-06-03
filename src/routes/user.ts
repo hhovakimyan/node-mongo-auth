@@ -2,7 +2,7 @@ import { makeClassInvoker } from 'awilix-express';
 import express from 'express';
 import multer from 'multer';
 
-import UserController from '#controllers/UserController';
+import { UserController } from '#controllers/UserController';
 import { validate } from '#middleware/validation';
 import { updateUserSchema } from '#validation/UpdateUserSchema';
 

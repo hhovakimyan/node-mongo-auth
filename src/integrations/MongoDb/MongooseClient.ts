@@ -1,6 +1,6 @@
 import mongoose, { Mongoose } from 'mongoose';
 
-class MongooseClient {
+export class MongooseClient {
     private static mongoose: Mongoose | null;
 
     public static async getInstance(): Promise<Mongoose> {
@@ -18,5 +18,3 @@ class MongooseClient {
         return MongooseClient.mongoose;
     }
 }
-
-export default MongooseClient;

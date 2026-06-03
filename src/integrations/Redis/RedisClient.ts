@@ -1,6 +1,6 @@
 import { createClient, type RedisClientType } from 'redis';
 
-class RedisClient {
+export class RedisClient {
     private static client: RedisClientType | null = null;
 
     public static async init() {
@@ -26,5 +26,3 @@ class RedisClient {
         return RedisClient.client;
     }
 }
-
-export default RedisClient;

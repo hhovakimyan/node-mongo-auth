@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express';
 
-import UserRepository from '#repositories/UserRepository';
+import type { UserRepository } from '#repositories/UserRepository';
 import type { UpdateUserParams } from '#types/Controllers';
 
-class UserController {
+export class UserController {
     private userRepository: UserRepository;
 
     public constructor(userRepository: UserRepository) {
@@ -51,5 +51,3 @@ class UserController {
         res.status(204).send();
     }
 }
-
-export default UserController;

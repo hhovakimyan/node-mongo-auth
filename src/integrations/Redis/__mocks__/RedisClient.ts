@@ -5,10 +5,10 @@ const mockRedisClient = {
     set: jest.fn().mockResolvedValue('OK'),
 };
 
-export default {
+const redisClientMock = {
     init: jest.fn().mockResolvedValue(undefined),
     connect: jest.fn().mockResolvedValue(undefined),
     getClient: jest.fn().mockReturnValue(mockRedisClient),
 };
 
-export { mockRedisClient };
+export { mockRedisClient, redisClientMock as RedisClient };

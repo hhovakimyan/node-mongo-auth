@@ -1,7 +1,7 @@
 import { makeClassInvoker } from 'awilix-express';
 import express from 'express';
 
-import AuthenticationController from '#controllers/AuthenticationController';
+import { AuthenticationController } from '#controllers/AuthenticationController';
 import { validate } from '#middleware/validation';
 import { loginUserSchema } from '#validation/LoginUserSchema';
 import { registerUserSchema } from '#validation/RegisterUserSchema';
