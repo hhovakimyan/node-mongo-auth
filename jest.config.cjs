@@ -8,7 +8,7 @@ module.exports = {
     },
     clearMocks: true,
     moduleNameMapper: {
-        '^bcrypt$': '<rootDir>/__mocks__/bcrypt.ts',
+        '^bcrypt$': '<rootDir>/tests/__mocks__/bcrypt.ts',
         '^#integrations/Redis/RedisClient$':
             '<rootDir>/src/integrations/Redis/__mocks__/RedisClient.ts',
         '^#controllers/(.*)$': '<rootDir>/src/controllers/$1',
